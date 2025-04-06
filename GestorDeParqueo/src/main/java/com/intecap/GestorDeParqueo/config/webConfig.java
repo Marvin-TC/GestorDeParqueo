@@ -15,7 +15,7 @@ public class webConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         System.out.println("Inteceptoagregado");
-       // registry.addInterceptor(inteceptorGeneral).addPathPatterns("/api/vehiculos/**");
-       // registry.addInterceptor(inteceptorGeneral).addPathPatterns("/api/registroParqueo/**");
+       registry.addInterceptor(inteceptorGeneral).addPathPatterns("/api/vehiculos/**");
+        registry.addInterceptor(inteceptorGeneral).addPathPatterns("/api/registroParqueo/**");
     }
 }
