@@ -2,6 +2,7 @@ package com.intecap.GestorDeParqueo.models;
 
 import jakarta.persistence.*;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Entity
@@ -12,7 +13,7 @@ public class RegistroParqueoModel {
     private Integer id;
     @Column(nullable = false)
     private LocalDateTime fechaIngreso;
-    @Column(nullable = false)
+    @Column(nullable = true)
     private LocalDateTime fechaSalida;
     private Integer minutosRealesEstacionados;
     @ManyToOne
@@ -22,16 +23,19 @@ public class RegistroParqueoModel {
      @OneToOne (mappedBy = "registroParqueo",cascade = CascadeType.ALL)
      private RegistroPagoModel registroPago;
 
-
-    public RegistroParqueoModel(int id, LocalDateTime fechaIngreso, LocalDateTime fechaSalida, Integer minutosRealesEstacionados, VehiculosModel vehiculo) {
+    public RegistroParqueoModel(int id, LocalDateTime fechaIngreso, LocalDateTime fechaSalida, Integer minutosRealesEstacionados) {
         this.id = id;
         this.fechaIngreso = fechaIngreso;
         this.fechaSalida = fechaSalida;
         this.minutosRealesEstacionados = minutosRealesEstacionados;
-        this.vehiculo = vehiculo;
     }
 
+
     public RegistroParqueoModel() {}
+
+    public RegistroPagoModel getRegistroPago() {
+        return registroPago;
+    }
 
     public Integer getId() {
         return id;
@@ -69,7 +73,16 @@ public class RegistroParqueoModel {
         this.minutosRealesEstacionados = minutosRealesEstacionados;
     }
 
-    public void setVehiculo(VehiculosModel vehiculo) {
-        this.vehiculo = vehiculo;
+    public void setRegistroPago(RegistroPagoModel registroPago) {
+        this.registroPago = registroPago;
+    }
+
+    public Integer calcularTiempoRealEstacionado(LocalDateTime fechaTiempo)
+    {
+        Integer minutos = (int) Duration.between(fechaIngreso,fechaTiempo).toMinutes();;
+        int horas = minutos / 60;
+        int restantes = minutos % 60;
+        System.out.println("Tiempo de uso: " + horas + "h " + restantes + "min");
+        return minutos;
     }
 }
